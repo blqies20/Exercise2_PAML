@@ -36,115 +36,117 @@ class _FormKulinerState extends State<FormKuliner> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        child: Column(
-      children: [
-        Container(
-          margin: EdgeInsets.all(10),
-          child: TextFormField(
-            decoration: InputDecoration(
-                labelText: "Nama", hintText: "Masukkan Nama Tempat Kuliner"),
-            controller: _namaController,
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.all(10),
-          child: TextFormField(
-            decoration: InputDecoration(
-                labelText: "Instagram", hintText: "Masukkan Akun Instagram Tempat Kuliner"),
-            controller: _instagramController,
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(10),
+    return SingleChildScrollView(
+      child: Form(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Alamat"),
-              _alamat == null
-                  ? SizedBox(
-                      width: double.infinity,
-                      child: Text('Alamat Kosong'),
-                    )
-                  : Text('$_alamat'),
-              _alamat == null
-                  ? TextButton(
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MapScreen(onLocationSeleced: (selectedAddress) {
-                              setState(() {
-                                _alamat = selectedAddress;
-                              });
-                            }),
-                          ),
-                        );
-                      },
-                      child: Text('Pilih Alamat'),
-                    )
-                  : TextButton(
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MapScreen(onLocationSeleced: (selectedAddress) {
-                              setState(() {
-                                _alamat = selectedAddress;
-                              });
-                            }),
-                          ),
-                        );
-                        setState(() {});
-                      },
-                      child: Text('Ubah Alamat'),
-                    )
-            ],
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: TextFormField(
+              decoration: InputDecoration(
+                  labelText: "Nama", hintText: "Masukkan Nama Tempat Kuliner"),
+              controller: _namaController,
+            ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.all(10),
-          child: TextFormField(
-            decoration: InputDecoration(
-                labelText: "Nomer Telepon", hintText: "Masukkan nomer"),
-            controller: _noTeleponController,
+          Container(
+            margin: EdgeInsets.all(10),
+            child: TextFormField(
+              decoration: InputDecoration(
+                  labelText: "Instagram", hintText: "Masukkan Akun Instagram Tempat Kuliner"),
+              controller: _instagramController,
+            ),
           ),
-        ),
-        _image != null ? Image.file(_image!) : Text("Tidak ada gambar"),
-        ElevatedButton(
-          onPressed: getImage,
-          child: Text("Pilih gambar"),
-        ),
-        Container(
-          margin: EdgeInsets.all(10),
-          child: ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                var result = await KulinerController().addWisata(
-                    Kuliner(
-                        nama: _namaController.text,
-                        instagram: _instagramController.text,
-                        alamat: _alamat ?? '',
-                        telepon: _noTeleponController.text,
-                        foto: _image!.path),
-                    _image);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      result['message'],
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Alamat"),
+                _alamat == null
+                    ? SizedBox(
+                        width: double.infinity,
+                        child: Text('Alamat Kosong'),
+                      )
+                    : Text('$_alamat'),
+                _alamat == null
+                    ? TextButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MapScreen(onLocationSeleced: (selectedAddress) {
+                                setState(() {
+                                  _alamat = selectedAddress;
+                                });
+                              }),
+                            ),
+                          );
+                        },
+                        child: Text('Pilih Alamat'),
+                      )
+                    : TextButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MapScreen(onLocationSeleced: (selectedAddress) {
+                                setState(() {
+                                  _alamat = selectedAddress;
+                                });
+                              }),
+                            ),
+                          );
+                          setState(() {});
+                        },
+                        child: Text('Ubah Alamat'),
+                      )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: TextFormField(
+              decoration: InputDecoration(
+                  labelText: "Nomer Telepon", hintText: "Masukkan nomer"),
+              controller: _noTeleponController,
+            ),
+          ),
+          _image != null ? Image.file(_image!) : Text("Tidak ada gambar"),
+          ElevatedButton(
+            onPressed: getImage,
+            child: Text("Pilih gambar"),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  var result = await KulinerController().addWisata(
+                      Kuliner(
+                          nama: _namaController.text,
+                          instagram: _instagramController.text,
+                          alamat: _alamat ?? '',
+                          telepon: _noTeleponController.text,
+                          foto: _image!.path),
+                      _image);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        result['message'],
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
-            child: Text("Submit"),
-          ),
-        )
-      ],
-    ));
+                  );
+                }
+              },
+              child: Text("Submit"),
+            ),
+          )
+        ],
+      )),
+    );
   }
 }
