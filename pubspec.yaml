@@ -44,6 +44,8 @@ dependencies:
   google_maps_flutter : ^2.2.3
   permission_handler : ^9.1.0
 
+  mysql1: ^0.20.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
