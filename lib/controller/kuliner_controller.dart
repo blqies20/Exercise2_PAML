@@ -3,9 +3,16 @@ import 'dart:io';
 
 import 'package:exercise2/model/kuliner.dart';
 import 'package:exercise2/service/kuliner_service.dart';
+import 'package:mysql1/mysql1.dart';
 
 class KulinerController {
   final kulinerService = KulinerService();
+
+  final String _host = 'localhost';
+  final int _port = 3306;
+  final String _user = 'root';
+  final String _password = 'Dubaddu05_';
+  final String _databaseName = 'kuliner';
 
   Future<Map<String, dynamic>> addWisata(Kuliner wisata, File? file) async {
     Map<String, String> data = {
@@ -47,7 +54,30 @@ class KulinerController {
   }
 
   Future<List<Kuliner>> getResto() async {
+    final connectionSettings = ConnectionSettings(
+      host: _host,
+      port: _port,
+      user: _user,
+      db: _databaseName,
+      password: _password,
+    );
+
+    final MySqlConnection connection =
+        await MySqlConnection.connect(connectionSettings);
+
     try {
+      final results = await connection.query('SELECT * FROM KULINER');
+
+      final kulinerList = results
+          .map((row) => Kuliner(
+                nama: row[0],
+                instagram: row[1],
+                alamat: row[2],
+                telepon: row[3],
+                foto: row[4],
+              ))
+          .toList();
+
       List<dynamic> restoData = await kulinerService.fetchResto();
       List<Kuliner> resto =
           restoData.map((json) => Kuliner.fromMap(json)).toList();
@@ -55,6 +85,8 @@ class KulinerController {
     } catch (e) {
       print(e);
       throw Exception('Failed to get resto');
+    } finally {
+      await connection.close();
     }
   }
 }
