@@ -4,9 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
-  final Function(String) onLocationSeleced;
+  final Function(String) onLocationSelected;
 
-  MapScreen({super.key, required this.onLocationSeleced});
+  MapScreen({super.key, required this.onLocationSelected});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -90,9 +90,9 @@ class _MapScreenState extends State<MapScreen> {
                   Placemark place = placemarks[0];
                   String fullAddress =
                       " ${place.name}, ${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}";
-                  widget.onLocationSeleced(fullAddress);
+                  widget.onLocationSelected(fullAddress);
                 } else {
-                  widget.onLocationSeleced("No address found");
+                  widget.onLocationSelected("No address found");
                 }
                 Navigator.pop(context);
               }
