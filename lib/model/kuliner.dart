@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class Kuliner {
+  int? id;
   final String nama;
   final String instagram;
   final String alamat;
@@ -8,15 +9,23 @@ class Kuliner {
   final String foto;
 
   Kuliner(
-      {required this.nama,
+      {required this.id,
+      required this.nama,
       required this.instagram,
       required this.alamat,
       required this.telepon,
       required this.foto});
 
   Kuliner copyWith(
-      {String? nama, String? instagram, String? alamat, String? telepon, String? foto}) {
+      {int? id,
+      String? nama,
+      String? instagram,
+      String? alamat,
+      String? telepon,
+      String? foto}) {
+        
     return Kuliner(
+        id: id ?? this.id,
         nama: nama ?? this.nama,
         instagram: instagram ?? this.instagram,
         alamat: alamat ?? this.alamat,
@@ -26,6 +35,7 @@ class Kuliner {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'nama': nama,
       'instagram': instagram,
       'alamat': alamat,
@@ -36,6 +46,7 @@ class Kuliner {
 
   factory Kuliner.fromMap(Map<String, dynamic> map) {
     return Kuliner(
+        id: map['id'] != null ? map['id'] as int : null,
         nama: map['nama'] as String,
         instagram: map['instagram'] as String,
         alamat: map['alamat'] as String,
@@ -50,14 +61,15 @@ class Kuliner {
 
   @override
   String toString() {
-    return 'Kuliner(nama: $nama, instagram: $instagram, alamat: $alamat, telepon: $telepon, foto: $foto)';
+    return 'Kuliner(id: $id, nama: $nama, instagram: $instagram, alamat: $alamat, telepon: $telepon, foto: $foto)';
   }
 
   @override
   bool operator ==(covariant Kuliner other) {
     if (identical(this, other)) return true;
 
-    return other.nama == nama &&
+    return other.id == id &&
+        other.nama == nama &&
         other.instagram == instagram &&
         other.alamat == alamat &&
         other.telepon == telepon &&
@@ -66,7 +78,8 @@ class Kuliner {
 
   @override
   int get hashCode {
-    return nama.hashCode ^
+    return id.hashCode ^
+        nama.hashCode ^
         instagram.hashCode ^
         alamat.hashCode ^
         telepon.hashCode ^
