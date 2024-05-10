@@ -1,6 +1,8 @@
 import 'package:exercise2/controller/kuliner_controller.dart';
 import 'package:exercise2/model/kuliner.dart';
-import 'package:exercise2/screen/input_view.dart';
+import 'package:exercise2/screen/detail_screen.dart';
+import 'package:exercise2/widget/edit_form.dart';
+import 'package:exercise2/widget/kuliner_form.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -12,6 +14,12 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final KulinerController _controller = KulinerController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.getResto();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +43,73 @@ class _HomeViewState extends State<HomeView> {
               itemCount: snapshot.data?.length ?? 0,
               itemBuilder: (context, index) {
                 Kuliner kuliner = snapshot.data![index];
-                return ListTile(
-                  title: Text(kuliner.nama),
-                  subtitle: Text(kuliner.instagram),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(kuliner.foto),
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(
+                              kuliner: Kuliner(
+                                  id: kuliner.id,
+                                  nama: kuliner.nama,
+                                  instagram: kuliner.instagram,
+                                  alamat: kuliner.alamat,
+                                  telepon: kuliner.telepon,
+                                  foto: kuliner.foto)),
+                        ));
+                  },
+                  child: ListTile(
+                    title: Text(kuliner.nama),
+                    subtitle: Text(kuliner.instagram),
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(kuliner.foto),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditForm(
+                                        kuliner: Kuliner(
+                                            id: kuliner.id,
+                                            nama: kuliner.nama,
+                                            instagram: kuliner.instagram,
+                                            alamat: kuliner.alamat,
+                                            telepon: kuliner.telepon,
+                                            foto: kuliner.foto))));
+                          },
+                          icon: Icon(Icons.edit),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) {
+                                    return AlertDialog(
+                                      title: Text('Hapus data ini?'),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () async {
+                                              await _controller.deleteResto(
+                                                  kuliner.id! as String);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Hapus')),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Batal')),
+                                      ],
+                                    );
+                                  }));
+                            },
+                            icon: Icon(Icons.delete))
+                      ],
+                    ),
                   ),
                 );
               },
@@ -47,11 +117,12 @@ class _HomeViewState extends State<HomeView> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => InputView()));
-      },
-      child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => FormKuliner()));
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
