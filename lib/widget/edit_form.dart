@@ -5,7 +5,6 @@ import 'package:exercise2/model/kuliner.dart';
 import 'package:exercise2/screen/homeview.dart';
 import 'package:exercise2/screen/map_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditForm extends StatefulWidget {
   const EditForm({super.key, required this.kuliner});
@@ -23,20 +22,7 @@ class _EditFormState extends State<EditForm> {
   final _instagramController = TextEditingController();
   final _noTeleponController = TextEditingController();
 
-  File? _image;
-  final _imagePicker = ImagePicker();
   String? _alamat;
-
-  Future<void> getImage() async {
-    final XFile? pickedFile =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +92,6 @@ class _EditFormState extends State<EditForm> {
                     ],
                   ),
                 ),
-                _image == null
-                    ? const Text("Tidak ada gambar yang dipilih")
-                    : Image.file(_image!),
-                ElevatedButton(
-                  onPressed: getImage,
-                  child: const Text("Pilih Gambar"),
-                ),
                 Container(
                   margin: EdgeInsets.all(10),
                   child: ElevatedButton(
@@ -120,13 +99,14 @@ class _EditFormState extends State<EditForm> {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
                           var result = await kulinerController.addResto(
-                              Kuliner(
-                                 id: widget.kuliner.id,
-                                  nama: _namaController.text,
-                                  instagram: _instagramController.text,
-                                  alamat: _alamat ?? '',
-                                  telepon: _noTeleponController.text,),
-                              );
+                            Kuliner(
+                              id: widget.kuliner.id,
+                              nama: _namaController.text,
+                              instagram: _instagramController.text,
+                              alamat: _alamat ?? '',
+                              telepon: _noTeleponController.text,
+                            ),
+                          );
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(result['message'])),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:exercise2/model/kuliner.dart';
 import 'package:exercise2/service/kuliner_service.dart';
 

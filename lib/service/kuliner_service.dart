@@ -18,6 +18,23 @@ class KulinerService {
     return await http.Response.fromStream(await request.send());
   }
 
+  Future<List<dynamic>> getResto() async {
+    var response = await http.get(
+      getUri(endpoint),
+      headers: {
+        "Accept": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> decodedResponse = json.decode(response.body);
+      return decodedResponse;
+    } else {
+      throw Exception(
+          'Failed to load wisata kuliner: ${response.reasonPhrase}');
+    }
+  }
+
   Future<List<dynamic>> fetchResto() async {
     var response = await http.get(
         getUri(
@@ -35,15 +52,15 @@ class KulinerService {
   }
 
   Future<http.Response> updateResto(Map<String, String> data, String id) async {
-  var request = http.MultipartRequest(
-    'PUT',
-    getUri('$endpoint/$id'),
-  )
-    ..fields.addAll(data)
-    ..headers['Content-Type'] = 'multipart/form-data';
+    var request = http.MultipartRequest(
+      'PUT',
+      getUri('$endpoint/$id'),
+    )
+      ..fields.addAll(data)
+      ..headers['Content-Type'] = 'multipart/form-data';
 
-  return await http.Response.fromStream(await request.send());
-}
+    return await http.Response.fromStream(await request.send());
+  }
 
   Future<http.Response> deleteResto(String id) async {
     return await http.delete(getUri('$endpoint/$id'));
