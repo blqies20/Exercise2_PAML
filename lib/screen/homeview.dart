@@ -16,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   final KulinerController _controller = KulinerController();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _controller.getResto();
   }

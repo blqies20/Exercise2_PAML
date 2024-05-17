@@ -48,10 +48,10 @@ class KulinerController {
 
   Future<List<Kuliner>> getResto() async {
     try {
-      List<dynamic> placeData = await _service.fetchResto();
-      List<Kuliner> place =
-          placeData.map((json) => Kuliner.fromMap(json)).toList();
-      return place;
+      List<dynamic> restoData = await _service.fetchResto();
+      List<Kuliner> resto =
+          restoData.map((json) => Kuliner.fromMap(json)).toList();
+      return resto;
     } catch (e) {
       print(e);
       throw Exception("Failed to get Tempat Kuliner");
@@ -97,37 +97,37 @@ class KulinerController {
       };
     }
   }
-}
 
-Future<Map<String, dynamic>> deleteResto(String id) async {
-  try {
-    var response = await _service.deleteResto(id);
+  Future<Map<String, dynamic>> deleteResto(String id) async {
+    try {
+      var response = await _service.deleteResto(id);
 
-    if (response.statusCode == 200) {
-      return {
-        'success': true,
-        'message': 'Data berhasil dihapus',
-      };
-    } else {
-      if (response.headers['content-type']!.contains('application/json')) {
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': 'Data berhasil dihapus',
+        };
+      } else {
+        if (response.headers['content-type']!.contains('application/json')) {
+          var decodedJson = jsonDecode(response.body);
+          return {
+            'success': false,
+            'message': decodedJson['message'] ?? 'Terjadi Kesalahan',
+          };
+        }
+
         var decodedJson = jsonDecode(response.body);
         return {
           'success': false,
-          'message': decodedJson['message'] ?? 'Terjadi Kesalahan',
+          'message':
+              decodedJson['message'] ?? 'Terjadi Kesalahan saat menghapus data',
         };
       }
-
-      var decodedJson = jsonDecode(response.body);
+    } catch (e) {
       return {
         'success': false,
-        'message':
-            decodedJson['message'] ?? 'Terjadi Kesalahan saat menghapus data',
+        'message': 'Terjadi kesalahan: $e',
       };
     }
-  } catch (e) {
-    return {
-      'success': false,
-      'message': 'Terjadi kesalahan: $e',
-    };
   }
 }

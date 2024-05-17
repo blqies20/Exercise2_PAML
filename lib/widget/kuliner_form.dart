@@ -19,6 +19,7 @@ class _FormKulinerState extends State<FormKuliner> {
   final _teleponController = TextEditingController();
 
   String? _alamat;
+  get _id => null;
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +102,22 @@ class _FormKulinerState extends State<FormKuliner> {
                 ),
                 Container(
                   margin: EdgeInsets.all(10),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        labelText: "Nomer Telepon",
+                        hintText: "Masukkan Nomer Telepon Tempat Kuliner"),
+                    controller: _teleponController,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         var result = await kulinerKontroller.addResto(
                           Kuliner(
-                            id: id,
+                            id: _id,
                             nama: _namaController.text,
                             instagram: _instagramController.text,
                             telepon: _teleponController.text,
