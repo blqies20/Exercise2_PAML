@@ -1,11 +1,8 @@
-import 'dart:io';
-
 import 'package:exercise2/controller/kuliner_controller.dart';
 import 'package:exercise2/model/kuliner.dart';
 import 'package:exercise2/screen/homeview.dart';
 import 'package:exercise2/screen/map_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FormKuliner extends StatefulWidget {
   const FormKuliner({super.key});
@@ -16,28 +13,12 @@ class FormKuliner extends StatefulWidget {
 
 class _FormKulinerState extends State<FormKuliner> {
   final _formKey = GlobalKey<FormState>();
+  final kulinerKontroller = KulinerController();
   final _namaController = TextEditingController();
   final _instagramController = TextEditingController();
-  final _noTeleponController = TextEditingController();
+  final _teleponController = TextEditingController();
 
-  File? _image;
-  final _imagePicker = ImagePicker();
   String? _alamat;
-
-  get _id => null;
-
-  Future<void> getImage() async {
-    final XFile? pickedFile =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('Tidak ada gambar');
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,44 +101,30 @@ class _FormKulinerState extends State<FormKuliner> {
                 ),
                 Container(
                   margin: EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        labelText: "Nomer Telepon", hintText: "Masukkan nomer"),
-                    controller: _noTeleponController,
-                  ),
-                ),
-                _image == null ? Text("Tidak ada gambar") : Image.file(_image!),
-                ElevatedButton(
-                  onPressed: getImage,
-                  child: Text("Pilih gambar"),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        var result = await KulinerController().addWisata(
-                            Kuliner(
-                              id: _id,
-                                nama: _namaController.text,
-                                instagram: _instagramController.text,
-                                alamat: _alamat ?? '',
-                                telepon: _noTeleponController.text,
-                                foto: _image!.path),
-                            _image);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              result['message'],
-                            ),
+                        var result = await kulinerKontroller.addResto(
+                          Kuliner(
+                            id: id,
+                            nama: _namaController.text,
+                            instagram: _instagramController.text,
+                            telepon: _teleponController.text,
+                            alamat: _alamat ?? '',
                           ),
                         );
 
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(result['message'])),
+                        );
+
                         Navigator.pushAndRemoveUntil(
+                            // ignore: use_build_context_synchronously
                             context,
-                            MaterialPageRoute(builder: (context) => HomeView()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomeView()),
                             (route) => false);
                       }
                     },
