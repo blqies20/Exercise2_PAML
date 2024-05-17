@@ -1,22 +1,21 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:exercise2/model/kuliner.dart';
 import 'package:exercise2/service/kuliner_service.dart';
-import 'package:http/http.dart';
 
 class KulinerController {
   final KulinerService _service = KulinerService();
 
-  Future<Map<String, dynamic>> addWisata(Kuliner wisata, File? file) async {
+  Future<Map<String, dynamic>> addResto(Kuliner kuliner) async {
     Map<String, String> data = {
-      'nama': wisata.nama,
-      'alamat': wisata.alamat,
-      'instagram': wisata.instagram,
-      'telepon': wisata.telepon
+      'nama': kuliner.nama,
+      'instagram': kuliner.instagram,
+      'alamat': kuliner.alamat,
+      'telepon': kuliner.telepon,
     };
+
     try {
-      var response = await _service.addResto(data, file);
+      var response = await _service.addResto(data);
 
       if (response.statusCode == 201) {
         return {
@@ -25,11 +24,10 @@ class KulinerController {
         };
       } else {
         if (response.headers['content-type']!.contains('application/json')) {
-          var decodeJson = jsonDecode(response.body);
-
+          var decodedJson = jsonDecode(response.body);
           return {
             'success': false,
-            'message': decodeJson['message'] ?? 'Terjadi kesalahan',
+            'message': decodedJson['message'] ?? 'Terjadi kesalahan',
           };
         }
 
@@ -50,19 +48,17 @@ class KulinerController {
 
   Future<List<Kuliner>> getResto() async {
     try {
-      List<dynamic> restoData = await _service.fetchResto();
-      List<Kuliner> resto =
-          restoData.map((json) => Kuliner.fromMap(json)).toList();
-      return resto;
+      List<dynamic> placeData = await _service.fetchResto();
+      List<Kuliner> place =
+          placeData.map((json) => Kuliner.fromMap(json)).toList();
+      return place;
     } catch (e) {
-      print('Response: $Response');
-      print('Exception: $e');
-      throw Exception('Failed to get resto');
+      print(e);
+      throw Exception("Failed to get Tempat Kuliner");
     }
   }
 
-  Future<Map<String, dynamic>> editResto(
-      Kuliner kuliner, File? file, String id) async {
+  Future<Map<String, dynamic>> updateResto(Kuliner kuliner, String id) async {
     Map<String, String> data = {
       'nama': kuliner.nama,
       'instagram': kuliner.instagram,
@@ -71,7 +67,7 @@ class KulinerController {
     };
 
     try {
-      var response = await _service.editResto(data, file, id);
+      var response = await _service.updateResto(data, id);
 
       if (response.statusCode == 200) {
         return {
@@ -83,7 +79,7 @@ class KulinerController {
           var decodedJson = jsonDecode(response.body);
           return {
             'success': false,
-            'message': decodedJson['message'] ?? 'Terjadi kesalahan',
+            'message': decodedJson['message'] ?? 'Terjadi Kesalahan',
           };
         }
 
@@ -101,37 +97,37 @@ class KulinerController {
       };
     }
   }
+}
 
-  Future<Map<String, dynamic>> deleteResto(String id) async {
-    try {
-      var response = await _service.deleteResto(id);
+Future<Map<String, dynamic>> deleteResto(String id) async {
+  try {
+    var response = await _service.deleteResto(id);
 
-      if (response.statusCode == 200) {
-        return {
-          'success': true,
-          'message': 'Data berhasil dihapus',
-        };
-      } else {
-        if (response.headers['content-type']!.contains('application/json')) {
-          var decodedJson = jsonDecode(response.body);
-          return {
-            'success': false,
-            'message': decodedJson['message'] ?? 'Terjadi Kesalahan',
-          };
-        }
-
+    if (response.statusCode == 200) {
+      return {
+        'success': true,
+        'message': 'Data berhasil dihapus',
+      };
+    } else {
+      if (response.headers['content-type']!.contains('application/json')) {
         var decodedJson = jsonDecode(response.body);
         return {
           'success': false,
-          'message':
-              decodedJson['message'] ?? 'Terjadi Kesalahan saat menghapus data',
+          'message': decodedJson['message'] ?? 'Terjadi Kesalahan',
         };
       }
-    } catch (e) {
+
+      var decodedJson = jsonDecode(response.body);
       return {
         'success': false,
-        'message': 'Terjadi kesalahan: $e',
+        'message':
+            decodedJson['message'] ?? 'Terjadi Kesalahan saat menghapus data',
       };
     }
+  } catch (e) {
+    return {
+      'success': false,
+      'message': 'Terjadi kesalahan: $e',
+    };
   }
 }
