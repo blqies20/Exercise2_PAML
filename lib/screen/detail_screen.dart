@@ -1,6 +1,6 @@
 import 'package:exercise2/model/kuliner.dart';
+import 'package:exercise2/widget/edit_form.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({
@@ -20,7 +20,6 @@ class _DetailScreenState extends State<DetailScreen> {
   TextEditingController instagram = TextEditingController();
   TextEditingController alamat = TextEditingController();
   TextEditingController telepon = TextEditingController();
-  ImagePicker gambar = ImagePicker();
 
   Kuliner kuliner;
   _DetailScreenState(this.kuliner);
@@ -41,24 +40,42 @@ class _DetailScreenState extends State<DetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  title: Text('Gambar Wisata Kuliner'),
-                  subtitle: Image(
-                      image: NetworkImage(kuliner.foto),
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover),
-                ),
-                ListTile(
                   title: Text('Wisata Kuliner Jogja'),
                   subtitle: Text(kuliner.nama),
                 ),
                 ListTile(
+                  title: Text('Akun Instagram Resto'),
+                  subtitle: Text(kuliner.instagram),
+                ),
+                ListTile(
                   title: Text('Alamat Resto'),
                   subtitle: Text(kuliner.alamat),
-                )
+                ),
+                ListTile(
+                  title: Text('Nomer Telepon Resto'),
+                  subtitle: Text(kuliner.telepon),
+                ),
               ],
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 153, 236, 202),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) =>  EditForm(
+                kuliner: Kuliner(
+                  id: kuliner.id,
+                  nama: kuliner.nama,
+                  instagram: kuliner.instagram,
+                  alamat: kuliner.alamat,
+                  telepon: kuliner.telepon,
+                  ),
+                )));
+        },
+        child: const Icon(
+          Icons.edit,
         ),
       ),
     );

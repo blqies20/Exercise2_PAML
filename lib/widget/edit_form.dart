@@ -119,15 +119,14 @@ class _EditFormState extends State<EditForm> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          var result = await kulinerController.addWisata(
+                          var result = await kulinerController.addResto(
                               Kuliner(
                                  id: widget.kuliner.id,
                                   nama: _namaController.text,
                                   instagram: _instagramController.text,
                                   alamat: _alamat ?? '',
-                                  telepon: _noTeleponController.text,
-                                  foto: _image!.path),
-                              _image);
+                                  telepon: _noTeleponController.text,),
+                              );
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(result['message'])),

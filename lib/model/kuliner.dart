@@ -6,31 +6,27 @@ class Kuliner {
   final String instagram;
   final String alamat;
   final String telepon;
-  final String foto;
 
   Kuliner(
       {required this.id,
       required this.nama,
       required this.instagram,
       required this.alamat,
-      required this.telepon,
-      required this.foto});
+      required this.telepon});
 
-  Kuliner copyWith(
-      {int? id,
-      String? nama,
-      String? instagram,
-      String? alamat,
-      String? telepon,
-      String? foto}) {
-        
+  Kuliner copyWith({
+    int? id,
+    String? nama,
+    String? instagram,
+    String? alamat,
+    String? telepon,
+  }) {
     return Kuliner(
         id: id ?? this.id,
         nama: nama ?? this.nama,
         instagram: instagram ?? this.instagram,
         alamat: alamat ?? this.alamat,
-        telepon: telepon ?? this.telepon,
-        foto: foto ?? this.foto);
+        telepon: telepon ?? this.telepon);
   }
 
   Map<String, dynamic> toMap() {
@@ -39,8 +35,7 @@ class Kuliner {
       'nama': nama,
       'instagram': instagram,
       'alamat': alamat,
-      'telepon': telepon,
-      'foto': foto
+      'telepon': telepon
     };
   }
 
@@ -50,8 +45,7 @@ class Kuliner {
         nama: map['nama'] as String,
         instagram: map['instagram'] as String,
         alamat: map['alamat'] as String,
-        telepon: map['telepon'] as String,
-        foto: map['foto'] as String);
+        telepon: map['telepon'] as String);
   }
 
   String toJson() => json.encode(toMap());
@@ -61,7 +55,7 @@ class Kuliner {
 
   @override
   String toString() {
-    return 'Kuliner(id: $id, nama: $nama, instagram: $instagram, alamat: $alamat, telepon: $telepon, foto: $foto)';
+    return 'Kuliner(id: $id, nama: $nama, instagram: $instagram, alamat: $alamat, telepon: $telepon)';
   }
 
   @override
@@ -72,8 +66,7 @@ class Kuliner {
         other.nama == nama &&
         other.instagram == instagram &&
         other.alamat == alamat &&
-        other.telepon == telepon &&
-        other.foto == foto;
+        other.telepon == telepon;
   }
 
   @override
@@ -82,7 +75,6 @@ class Kuliner {
         nama.hashCode ^
         instagram.hashCode ^
         alamat.hashCode ^
-        telepon.hashCode ^
-        foto.hashCode;
+        telepon.hashCode;
   }
 }
