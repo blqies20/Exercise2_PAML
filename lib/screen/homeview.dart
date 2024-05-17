@@ -16,7 +16,7 @@ class _HomeViewState extends State<HomeView> {
   final KulinerController _controller = KulinerController();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _controller.getResto();
   }
@@ -54,16 +54,12 @@ class _HomeViewState extends State<HomeView> {
                                   nama: kuliner.nama,
                                   instagram: kuliner.instagram,
                                   alamat: kuliner.alamat,
-                                  telepon: kuliner.telepon,
-                                  foto: kuliner.foto)),
+                                  telepon: kuliner.telepon)),
                         ));
                   },
                   child: ListTile(
                     title: Text(kuliner.nama),
                     subtitle: Text(kuliner.instagram),
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(kuliner.foto),
-                    ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -73,13 +69,13 @@ class _HomeViewState extends State<HomeView> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditForm(
-                                        kuliner: Kuliner(
-                                            id: kuliner.id,
-                                            nama: kuliner.nama,
-                                            instagram: kuliner.instagram,
-                                            alamat: kuliner.alamat,
-                                            telepon: kuliner.telepon,
-                                            foto: kuliner.foto))));
+                                            kuliner: Kuliner(
+                                          id: kuliner.id,
+                                          nama: kuliner.nama,
+                                          instagram: kuliner.instagram,
+                                          alamat: kuliner.alamat,
+                                          telepon: kuliner.telepon,
+                                        ))));
                           },
                           icon: Icon(Icons.edit),
                         ),
